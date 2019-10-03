@@ -1,6 +1,5 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-// var table = require ("cli-table3");
 const table = require('console.table');
 
 var connection = mysql.createConnection({
@@ -32,22 +31,27 @@ function afterConnection() { //productTable
             {
                 name: "id",
                 type: "input",
-                message: "What is the ID of the item you would like to purchase? [QUIT with Q]",
+                message: "What is the ID of the item you would like to purchase?",
                 // filter:Number
             },
+
             {
                 name: "quantity",
                 type: "input",
                 message: "How many would you like? [QUIT with Q]",
+            
                 // filter:Number
             },
 
         ])
         .then(product => {
-            if (product.id === "Q" || product.quantity === "Q") {
-                console.log("thank you")
-                 connection.end()
-                 console.clear
+            if (product.quantity === "Q") {
+                console.clear
+                console.log("thanks")
+                afterConnection()
+                //  connection.end()
+                 
+                
 
             } else 
             {
@@ -55,25 +59,29 @@ function afterConnection() { //productTable
                     if (err) throw err;
                     //var totalCost = 0;
                     var totalCost = res[0].price * product.quantity;
-                    console.log(" ");
-                    console.log(" ");
-                    console.log(" ");
-                    console.log("current stock: " + res[0].stock_quantity);
-                    console.log("user requested stock: " + product.quantity);
+                    // console.log(" ");
+                    // console.log(" ");
+                    // console.log(" ");
+                    // console.log("current stock: " + res[0].stock_quantity);
+                    // console.log("user requested stock: " + product.quantity);
                     var newQty = res[0].stock_quantity - product.quantity;
-                    console.log("newQty: " + newQty);
-                    console.log(" ");
-                    console.log(" ");
-                    console.log(" ");
+                    // console.log("newQty: " + newQty);
+                    // console.log(" ");
                     if (res[0].stock_quantity <= 0 || res[0].stock_quantity < product.quantity) {
-                        console.log("! Cannot approve transaction: item is sold out, or you entered an " +  "incorrect value.");
+                        console.log('\n---------------------------------------\n')
+                        console.log("Cannot approve transaction: item is sold out, or you entered an " +  "incorrect value.");
+                        console.log('\n---------------------------------------\n')
+                        afterConnection()
        
                     } else {
                             connection.query("UPDATE products SET stock_quantity =  "  + newQty + " WHERE id = " + product.id,function (err, res) {
                                 if (err) throw err;
                             });
 
-                        purchasedItem(res[0], product) 
+                        purchasedItem(res[0], product);
+                        
+                    
+                        
 
                         // console.clear();
                         // console.log("thank you");
@@ -83,23 +91,21 @@ function afterConnection() { //productTable
                 }
                 });
             }
+            
 
             function purchasedItem(product_db, user_input){
-                console.log("Thank you  for your purchase of" +  product_db.quantity + product_db.name);
-                console.log("The price of the item is: $" + product_db.price);
+                
+                // console.log(product_db)
                 console.log('\n---------------------------------------\n')
+                console.log("Thank you  for your purchase of " +  user_input.quantity + " " + product_db.product_name);
+                // console.log("The price of the item is: $" + product_db.price);
+                console.log('\n---------------------------------------\n')
+                // purchasePrompt();
+                afterConnection()
 
             }
             
-            console.log(`Would you like to make another purchase?`);
-
-            resume (){
-                if 
-            }
-
-                
-
-                purchasePrompt()
+            
            
         
 
