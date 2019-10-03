@@ -1,6 +1,8 @@
 # Bamazon Customer and Manager Store
 An interactive storefront that runs in the console using node.
 
+![Image](Screen-Shot-Bamazon.png))
+
 ## Bamazon Customer/ Manager: 
 
 [YouTube Link](https://youtu.be/1krNNTd-bHM)
